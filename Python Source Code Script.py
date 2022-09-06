@@ -1,11 +1,15 @@
 #Beginning of program
+
 #Importing modules
 import mysql.connector
 from math import floor, ceil
+
 #Establishing connection
 connect = mysql.connector.connect(host = 'localhost', user = 'root', passwd = '1234', database = 'INVOICES')
 cursor = connect.cursor()
+
 #Function definitions
+
 def spacing(invoice): #For arranging data in form of table
     print(' ', '-'*16, '-'*26, '-'*26, '-'*12, '-'*25, '', sep = '+')
     print('', 'INVOICE NUMBER', '     CUSTOMER NAME      ', '        ADDRESS         ', '   DATE   ', '     INVOICE TOTAL     ', '', sep = ' | ')
@@ -13,6 +17,7 @@ def spacing(invoice): #For arranging data in form of table
     for c in invoice:
         print('', ' '*floor(7-len(str(c[0]))/2) + str(c[0]) + ' '*ceil(7-len(str(c[0]))/2), ' '*floor(12-len(c[1])/2) + c[1] + ' '*ceil(12-len(c[1])/2), ' '*floor(12-len(c[2])/2) + c[2] + ' '*ceil(12-len(c[2])/2), str(c[3]), ' '*floor(11.5-len(str(c[4]))/2) + str(c[4]) + ' '*ceil(11.5-len(str(c[4]))/2), '', sep = ' | ')
     print(' ', '-'*16, '-'*26, '-'*26, '-'*12, '-'*25, '', sep = '+')
+    
 def date_input(): #Taking date from user
     d = input('Enter date(DD): ')
     while int(d) < 1 or int(d) > 31: 
@@ -32,11 +37,13 @@ def date_input(): #Taking date from user
         y = input('Enter correct year(YYYY): ')
     req_date = y + '-' + m + '-' +d
     return req_date
+
 def display(invoice): #Displaying particular customer
     if len(invoice) == 0:
         print('\nNo matching record found')
     else:
         spacing(invoice)
+        
 def invoice_display(no): #Displaying invoice
     cursor.execute('SELECT * FROM INVOICE_%s' %(no,))
     invoice = cursor.fetchall()
@@ -58,6 +65,7 @@ def invoice_display(no): #Displaying invoice
     print(' ', '-'*26, '-'*13, '-'*25, '-'*6, '-'*25, '-'*25, '', sep = '+')
     print('\nINVOICE TOTAL: Rs', total, '\n')
     print('DELHIVERY EXPRESS CORPORATION, Tamil Nadu\n')
+    
 def all(): #Displaying all customers
     cursor.execute('SELECT * FROM INVOICES_LIST')
     invoice = cursor.fetchall()
@@ -65,11 +73,13 @@ def all(): #Displaying all customers
         print('No existing record')
     else:
         spacing(invoice)
+        
 def date(): #Displaying customers by date
     given_date = date_input()
     cursor.execute("SELECT * FROM INVOICES_LIST WHERE DATE = '%s'" %(given_date,))
     invoice = cursor.fetchall()
     display(invoice)
+    
 def total(): #Displaying customers by total
     lower = float(input('Enter lower limit of total(Rs): '))
     upper = float(input('Enter upper limit of total(Rs): '))
@@ -86,6 +96,7 @@ def total(): #Displaying customers by total
     cursor.execute('SELECT * FROM INVOICES_LIST WHERE INVOICE_TOTAL BETWEEN %s AND %s' %(lower, upper))
     invoice = cursor.fetchall()
     display(invoice)
+    
 def invoice_by_no(): #Displaying invoice by no.
     no = int(input('Enter invoice no. whose invoice is to be displayed: '))
     cursor.execute('SELECT INVOICE_NO FROM INVOICES_LIST')
@@ -94,6 +105,7 @@ def invoice_by_no(): #Displaying invoice by no.
         print('\nInvoice does not exist.')
     else:
         invoice_display(no)
+        
 def all_invoices(): #Displaying all invoices
     cursor.execute('SELECT * FROM INVOICES_LIST')
     invoices_list = cursor.fetchall()
@@ -102,6 +114,7 @@ def all_invoices(): #Displaying all invoices
     for i in invoices_list:
         invoice_display(i[0])
         print()
+        
 def new_items(no): #Entering new items in invoice
     while True:
         item = input('Enter item name: ').capitalize()
@@ -137,6 +150,7 @@ def new_items(no): #Entering new items in invoice
     total = total[0][0]
     total = round(total,2)
     return total
+
 def new(): #Making new invoice
     date = date_input()
     no = int(input('Enter invoice no.: '))
@@ -160,6 +174,7 @@ def new(): #Making new invoice
     cursor.execute("INSERT INTO INVOICES_LIST VALUES(%s, '%s', '%s', '%s', %s)" %(no, name, address, date, sum_total))
     connect.commit()
     invoice_display(no)
+    
 def edit_invoice(): #Editing invoice
     no = int(input('Enter invoice no. whose invoice is to be edited: '))
     cursor.execute('SELECT INVOICE_NO FROM INVOICES_LIST')
@@ -279,6 +294,7 @@ def edit_invoice(): #Editing invoice
             connect.commit()
             print('\nINVOICE UPDATED')
             invoice_display(no)
+            
 def delete(): #Deleting invoice
     no = int(input('Enter invoice number, whose invoice is to be deleted: '))
     cursor.execute('SELECT INVOICE_NO FROM INVOICES_LIST')
@@ -290,7 +306,9 @@ def delete(): #Deleting invoice
         cursor.execute('DELETE FROM INVOICES_LIST WHERE INVOICE_NO = %s' %(no,))
         connect.commit()
         print('INVOICE DELETED')
+        
 #Main program
+
 print('WELCOME!')
 print('DELHIVERY EXPRESS CORPORATION')
 print('GSTIN: 33AAICM7545C1ZK')
