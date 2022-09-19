@@ -12,3 +12,8 @@ The invoices will be visible in proper tabular format.
 1. Download the ZIP file, and extract its all content.
 2. Run the commands of the file **"Initial Database and Table"** in MySQL Command Line Client, so that the empty database for INVOICES and invoices_list table are created.
 3. Locate the .py file and run it.
+## EXAMPLES
+### DISPLAYING ALL CUSTOMERS
+![all customers](https://user-images.githubusercontent.com/73281984/191079504-443ea331-0ced-4eb0-869f-84e119fd2c2f.PNG)
+### DISPLAYING ALL INVOICES
+![all invoices](https://user-images.githubusercontent.com/73281984/191079121-d9c57089-8e97-46df-8f08-cadec6117f32.PNG)
